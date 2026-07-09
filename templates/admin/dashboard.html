@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block page_title %}Admin Analytics{% endblock %}
+{% block content %}
+<div class="kpi-grid">
+    <div class="kpi glass-card"><i data-lucide="users"></i><span>Users</span><strong data-count="{{ users }}">0</strong></div>
+    <div class="kpi glass-card"><i data-lucide="list-checks"></i><span>Quiz Questions</span><strong data-count="{{ questions }}">0</strong></div>
+    <div class="kpi glass-card"><i data-lucide="flag"></i><span>CTF Challenges</span><strong data-count="{{ ctf }}">0</strong></div>
+    <div class="kpi glass-card"><i data-lucide="bar-chart-3"></i><span>Avg Quiz</span><strong data-count="{{ avg_quiz|round(0)|int }}">0</strong></div>
+</div>
+<div class="admin-actions">
+    <a href="{{ url_for('admin.users') }}" class="mini-action">Manage Users</a>
+    <a href="{{ url_for('admin.quiz_questions') }}" class="mini-action">Add Quiz Questions</a>
+    <a href="{{ url_for('admin.phishing') }}" class="mini-action">Add Phishing Examples</a>
+    <a href="{{ url_for('admin.ctf') }}" class="mini-action">Add CTF Challenges</a>
+</div>
+<section class="glass-card">
+    <h2>Recent Users</h2>
+    <table class="cyber-table"><tr><th>Name</th><th>Email</th><th>Role</th></tr>{% for user in recent_users %}<tr><td>{{ user.name }}</td><td>{{ user.email }}</td><td>{{ user.role }}</td></tr>{% endfor %}</table>
+</section>
+{% endblock %}
+

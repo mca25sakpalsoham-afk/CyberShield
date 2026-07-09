@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block page_title %}Capture The Flag{% endblock %}
+{% block content %}
+{% if message %}<div class="alert glass-alert">{{ message }}</div>{% endif %}
+<div class="card-grid">
+    {% for challenge in challenges %}
+    <article class="glass-card challenge-card">
+        <div class="section-head"><h2>{{ challenge.title }}</h2><span>{{ challenge.difficulty }} / {{ challenge.points }} pts</span></div>
+        <p>{{ challenge.description }}</p>
+        {% if challenge.id in solved %}
+        <div class="risk-pill low">Solved</div>
+        {% else %}
+        <form method="post" class="inline-form">
+            <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+            <input name="flag" required placeholder="CYBER{...}">
+            <button class="btn-cyber" type="submit"><i data-lucide="flag"></i></button>
+        </form>
+        {% endif %}
+    </article>
+    {% endfor %}
+</div>
+{% endblock %} 
+

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Register | CyberShield{% endblock %}
+{% block content %}
+<div class="auth-stage">
+    <div class="auth-panel glass-card">
+        <div class="brand auth-brand"><span class="brand-mark">CS</span><span>CyberShield</span></div>
+        <h2>Create your analyst profile</h2>
+        <p class="muted">Start with guided defensive labs and simulated attack demonstrations.</p>
+        <form method="post" class="stacked-form">
+            <label>Name<input name="name" required placeholder="Your name"></label>
+            <label>Email<input name="email" type="email" required placeholder="you@example.com"></label>
+            <label>Password<input name="password" type="password" required minlength="8" placeholder="Minimum 8 characters"></label>
+            <button class="btn-cyber" type="submit"><i data-lucide="user-plus"></i> Register</button>
+        </form>
+        <p class="auth-switch">Already registered? <a href="{{ url_for('auth.login') }}">Login</a></p>
+    </div>
+</div>
+{% endblock %}
+

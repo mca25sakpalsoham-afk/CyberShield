@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block page_title %}Cybersecurity Quiz Arena{% endblock %}
+{% block content %}
+<section class="glass-card">
+    <div class="section-head"><h2>Timed Assessment</h2><span id="quizTimer">05:00</span></div>
+    <form method="post" id="quizForm" class="quiz-form">
+        {% for q in questions %}
+        <div class="question-block">
+            <h3>{{ loop.index }}. {{ q.question }}</h3>
+            {% for key, value in {"A": q.option_a, "B": q.option_b, "C": q.option_c, "D": q.option_d}.items() %}
+            <label><input type="radio" name="q_{{ q.id }}" value="{{ key }}" required> {{ value }}</label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <button class="btn-cyber" type="submit"><i data-lucide="send"></i> Submit Quiz</button>
+    </form>
+</section>
+{% if result %}
+<section class="glass-card result-card">
+    <h2>Score: {{ result.score }}/{{ result.total }} ({{ result.percentage|round(1) }}%)</h2>
+    {% for row in result.feedback %}
+    <p><strong>{{ "Correct" if row.correct else "Review" }}:</strong> {{ row.explanation }}</p>
+    {% endfor %}
+</section>
+{% endif %}
+{% endblock %}
+

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+User Progress Analytics
+{% endblock %}
+
+{% block content %}
+
+<section class="glass-card">
+
+    <h2 style="margin-bottom:20px;">
+        User Progress Dashboard
+    </h2>
+
+    <table class="cyber-table">
+
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Completed</th>
+            <th>Cyber Readiness</th>
+            <th>Joined</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for item in user_stats %}
+
+        <tr>
+
+            <td>{{ item.user.name }}</td>
+
+            <td>{{ item.user.email }}</td>
+
+            <td>{{ item.user.role }}</td>
+
+            <td>
+
+                {{ item.completed }}/{{ item.total }}
+                {% set progress_width = ((item.completed / item.total) * 100)|round(0)|int %}
+
+            <div class="progress-bar">
+
+                <div class="progress-fill"
+                    data-width="{{ progress_width }}">
+                </div>
+
+            </div>
+
+
+            </td>
+
+            <td>
+
+                {% if item.security_score >= 80 %}
+                    🟢 {{ item.security_score }}%
+                {% elif item.security_score >= 50 %}
+                    🟡 {{ item.security_score }}%
+                {% else %}
+                    🔴 {{ item.security_score }}%
+                {% endif %}
+
+            </td>
+
+            <td>
+                {{ item.user.created_at.strftime("%Y-%m-%d") }}
+            </td>
+
+            <td>
+                <a
+                    href="{{ url_for('admin.user_details', user_id=item.user.id) }}"
+                    class="mini-action"
+                >
+                    View Details
+                </a>
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</section>
+
+<script>
+document.querySelectorAll('.progress-fill').forEach(bar => {
+    bar.style.width = bar.dataset.width + '%';
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block page_title %}CTF Challenge Manager{% endblock %}
+{% block content %}
+<section class="glass-card">
+    <form method="post" class="stacked-form admin-form">
+        <label>Title<input name="title" required></label>
+        <label>Description<textarea name="description" required></textarea></label>
+        <div class="form-grid"><label>Difficulty<select name="difficulty"><option>Easy</option><option>Medium</option><option>Hard</option></select></label><label>Points<input name="points" type="number" value="50" required></label></div>
+        <label>Flag<input name="flag" required placeholder="CYBER{flag}"></label>
+        <button class="btn-cyber" type="submit">Add Challenge</button>
+    </form>
+</section>
+{% endblock %}

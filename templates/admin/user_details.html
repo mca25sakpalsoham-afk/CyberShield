@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+User Details
+{% endblock %}
+
+{% block content %}
+
+<section class="glass-card">
+
+    <h2>{{ user.name }}</h2>
+
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    <p><strong>Role:</strong> {{ user.role }}</p>
+
+    <p><strong>Joined:</strong> {{ ist_time(user.created_at).strftime("%Y-%m-%d %H:%M") }}</p>
+
+    <p>
+        <strong>Cyber Readiness:</strong>
+        {{ cyber_readiness }}%
+    </p>
+
+    <p>
+        <strong>Completed Modules:</strong>
+        {{ completed_modules }}/{{ total_modules }}
+    </p>
+
+</section>
+
+<br>
+
+<section class="glass-card">
+
+    <h3>Module Performance</h3>
+
+    <table class="cyber-table">
+
+        <tr>
+            <th>Module</th>
+            <th>Completed</th>
+            <th>Score</th>
+        </tr>
+
+        {% for progress in user.progress %}
+
+        <tr>
+
+            <td>{{ progress.module_name }}</td>
+
+            <td>
+                {% if progress.completed %}
+                    ✅
+                {% else %}
+                    ❌
+                {% endif %}
+            </td>
+
+            <td>{{ progress.score }}%</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</section>
+
+{% endblock %}

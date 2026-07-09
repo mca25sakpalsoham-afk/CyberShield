@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block page_title %}SQL Injection Training Lab{% endblock %}
+{% block content %}
+<div class="lab-grid">
+    <section class="glass-card">
+        <h2>Safe Login Simulation</h2>
+        <form method="post" class="stacked-form">
+            <label>Username<input name="username" placeholder="admin"></label>
+            <label>Password<input name="password" placeholder="' OR '1'='1"></label>
+            <button class="btn-cyber" type="submit"><i data-lucide="database-zap"></i> Test Payload</button>
+        </form>
+    </section>
+    <section class="glass-card compare-card">
+
+    <h2>Attack Analysis</h2>
+
+    {% if result %}
+
+    <div class="compare-grid">
+
+        <div>
+            <span>Vulnerable Login</span>
+
+            <strong class="{{ 'danger-text' if result.bypass else '' }}">
+                {{ result.vulnerable_result }}
+            </strong>
+        </div>
+
+        <div>
+            <span>Parameterized Login</span>
+
+            <strong>
+                {{ result.secure_result }}
+            </strong>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="glass-card" style="padding:15px;margin-top:10px;">
+
+        <h3>Generated Vulnerable Query</h3>
+
+        <pre style="white-space:pre-wrap;color:#20e3b2;">
+SELECT * FROM users
+WHERE username='{{ request.form.get("username","") }}'
+AND password='{{ request.form.get("password","") }}'
+        </pre>
+
+    </div>
+
+    <br>
+
+    <div class="glass-card" style="padding:15px;">
+
+        <h3>Risk Assessment</h3>
+        <p>
+            <strong>Attack Type:</strong>
+            {{ result.attack_type }}
+        </p>
+        <p>
+            <strong>Severity:</strong>
+
+            {% if result.risk == "CRITICAL" %}
+                <span class="danger-text">🔴 CRITICAL</span>
+            {% else %}
+                <span style="color:#20e3b2;">🟢 LOW</span>
+            {% endif %}
+        </p>
+
+        {% if result.bypass %}
+
+        <p class="danger-text">
+            Risk Level: CRITICAL
+        </p>
+
+        <ul>
+            <li>Authentication Bypass</li>
+            <li>Unauthorized Access</li>
+            <li>Possible Data Exposure</li>
+        </ul>
+
+        {% else %}
+
+        <p style="color:#20e3b2;">
+            Risk Level: LOW
+        </p>
+
+        <ul>
+            <li>No Injection Detected</li>
+            <li>Login Validation Passed</li>
+        </ul>
+
+        {% endif %}
+
+    </div>
+
+    <br>
+
+    <div class="glass-card" style="padding:15px;">
+
+        <h3>Defensive Controls</h3>
+
+        <ul>
+            <li>Parameterized Queries</li>
+            <li>Input Validation</li>
+            <li>Least Privilege Database Accounts</li>
+            <li>Stored Procedures</li>
+        </ul>
+
+    </div>
+
+    {% else %}
+
+    <p class="muted">
+        Try the sample payload to see why string-concatenated SQL is dangerous and why bound parameters stop the bypass.
+    </p>
+
+    {% endif %}
+
+</section>
+</div>
+<div class="glass-card" style="margin-top:20px;padding:15px;">
+
+    <h3>Supported SQL Injection Payloads</h3>
+
+    <ul>
+        <li>' OR '1'='1</li>
+        <li>admin'--</li>
+        <li>' OR 1=1--</li>
+        <li>admin' OR 'x'='x</li>
+        <li>' UNION SELECT</li>
+        <li>' OR TRUE--</li>
+    </ul>
+
+</div>
+
+{% endblock %}
+

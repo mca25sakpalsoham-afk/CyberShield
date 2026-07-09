@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% block page_title %}Network Scanner Simulation{% endblock %}
+{% block content %}
+<div class="lab-grid">
+    <section class="glass-card">
+        <h2>Simulated Target Scan</h2>
+        <form method="post" class="stacked-form">
+            <label>IP Address<input name="ip_address" required value="{{ ip_address }}" placeholder="192.168.10.24"></label>
+            <button class="btn-cyber" type="submit"><i data-lucide="radar"></i> Generate Scan Report</button>
+        </form>
+        <p class="hint">No network traffic is generated. Results come from predefined training profiles.</p>
+    </section>
+    <section class="glass-card">
+        <section class="glass-card">
+
+        <h2>Scan Report</h2>
+        
+
+        {% if scan %}
+
+        <div class="risk-pill {{ scan.risk_level|lower }}">
+            Risk: {{ scan.risk_level }}
+        </div>
+
+        <br>
+
+        <div class="glass-card" style="padding:15px;">
+
+            <h3>Scan Summary</h3>
+
+            <p><strong>Target:</strong> {{ scan.target }}</p>
+            <p><strong>Open Ports:</strong> {{ scan.open_ports|length }}</p>
+            <p><strong>Risk Level:</strong> {{ scan.risk_level }}</p>
+
+        </div>
+
+        <br>
+
+        <div class="glass-card" style="padding:15px;">
+
+            <h3>Security Score</h3>
+
+            <strong>{{ scan.security_score }}/100</strong>
+
+            <div class="progress-bar">
+                <div class="progress-fill"
+                    data-width="{{ scan.security_score }}">
+                </div>
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="glass-card" style="padding:15px;">
+
+            <h3>Open Services</h3>
+
+            <table class="cyber-table">
+
+                <tr>
+                    <th>Port</th>
+                    <th>Service</th>
+                    <th>Status</th>
+                    <th>Severity</th>
+                </tr>
+
+                {% for item in scan.open_ports %}
+
+                <tr>
+                    <td>{{ item.port }}</td>
+                    <td>{{ item.service }}</td>
+                    <td>{{ item.status }}</td>
+                    <td>{{ item.severity }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+        <br>
+
+        <div class="glass-card" style="padding:15px;">
+
+            <h3>Vulnerability Findings</h3>
+
+            <table class="cyber-table">
+
+                <tr>
+                    <th>Severity</th>
+                    <th>Finding</th>
+                    <th>CVE</th>
+                </tr>
+
+                {% for vuln in scan.vulnerabilities %}
+
+                <tr>
+                    <td>{{ vuln.severity }}</td>
+                    <td>{{ vuln.name }}</td>
+                    <td>{{ vuln.cve }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+        <br>
+
+        <div class="glass-card" style="padding:15px;">
+
+            <h3>Potential Risks</h3>
+
+            <ul>
+                <li>Unauthorized Access</li>
+                <li>Service Enumeration</li>
+                <li>Data Exposure</li>
+                <li>Credential Theft</li>
+            </ul>
+
+        </div>
+
+        <br>
+
+        <div class="glass-card" style="padding:15px;">
+
+            <h3>Recommended Actions</h3>
+
+            <ul>
+
+                {% for rec in scan.recommendations %}
+
+                <li>{{ rec }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        <div class="glass-card" style="padding:15px;">
+            <h3>Risk Breakdown</h3>
+
+            <li> 🔴 Critical: {{ scan.risk_breakdown.critical }}</li>
+            <li> 🟠 High: {{ scan.risk_breakdown.high }}</li>
+            <li> 🟡 Medium: {{ scan.risk_breakdown.medium }}</li>
+            <li> 🟢 Low: {{ scan.risk_breakdown.low }}</li>
+        </div>
+
+        <div class="glass-card" style="padding:15px;">
+            <h3>Scan Metadata</h3>
+
+            <p><strong>Scan Type:</strong> Vulnerability Assessment</p>
+            <p><strong>Engine:</strong> CyberShield Scanner v1.0</p>
+            <p><strong>Status:</strong> Completed</p>
+            <p><strong>Duration:</strong> 2.3 seconds</p>
+        </div>
+
+        <div class="glass-card" style="padding:15px;">
+            <h3>MITRE ATT&CK Techniques</h3>
+
+            <ul>
+                <li>T1046 - Network Service Discovery</li>
+                <li>T1595 - Active Scanning</li>
+                <li>T1133 - External Remote Services</li>
+            </ul>
+        </div>
+
+        {% else %}
+
+        <p class="muted">
+            Enter any IP address to load a professional simulated scan result.
+        </p>
+
+        {% endif %}
+
+        </section>
+
+    </section>
+</div>
+
+<script>
+document.querySelectorAll('.progress-fill').forEach(bar => {
+    bar.style.width = bar.dataset.width + '%';
+});
+</script>
+{% endblock %}
+

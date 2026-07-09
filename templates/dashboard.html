@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block page_title %}Security Operations Dashboard{% endblock %}
+{% block content %}
+<div class="kpi-grid">
+    <div class="kpi glass-card"><i data-lucide="check-circle"></i><span>Total Modules Completed</span><strong data-count="{{ completed }}">0</strong></div>
+    <div class="kpi glass-card"><i data-lucide="shield-check"></i><span>Security Score</span><strong data-count="{{ security_score }}">0</strong></div>
+    <div class="kpi glass-card"><i data-lucide="timer"></i><span>Quiz Score</span><strong data-count="{{ quiz_score|round(0)|int }}">0</strong></div>
+    <div class="kpi glass-card"><i data-lucide="award"></i><span>Badges Earned</span><strong data-count="{{ badge_count }}">0</strong></div>
+</div>
+<div class="dashboard-grid">
+    <section class="glass-card chart-card">
+        <div class="section-head"><h2>Learning Progress</h2><span>{{ completed }}/{{ modules|length }} modules</span></div>
+        <canvas id="progressChart" data-completed="{{ completed }}" data-total="{{ modules|length }}"></canvas>
+    </section>
+    <section class="glass-card chart-card">
+        <div class="section-head"><h2>Module Completion Rate</h2><span>Scores by lab</span></div>
+        <canvas id="moduleChart" data-labels='{{ modules|tojson }}'></canvas>
+    </section>
+    <section class="glass-card chart-card wide">
+        <div class="section-head"><h2>Attack Categories Learned</h2><a href="{{ url_for('main.report') }}" class="mini-action"><i data-lucide="download"></i> PDF Report</a></div>
+        <canvas id="attackChart"></canvas>
+    </section>
+</div>
+<script id="moduleScores" type="application/json">{{ module_scores|tojson }}</script>
+<script id="radarData" type="application/json">{{ radar_data|tojson }}</script>
+{% endblock %}

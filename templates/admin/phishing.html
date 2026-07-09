@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block page_title %}Phishing Example Manager{% endblock %}
+{% block content %}
+<section class="glass-card">
+    <form method="post" class="stacked-form admin-form">
+        <label>Subject<input name="subject" required></label>
+        <label>Sender<input name="sender" required></label>
+        <label>Body<textarea name="body" required></textarea></label>
+        <label>Classification<select name="is_phishing"><option value="true">Phishing</option><option value="false">Legitimate</option></select></label>
+        <label>Explanation<textarea name="explanation" required></textarea></label>
+        <button class="btn-cyber" type="submit">Add Example</button>
+    </form>
+</section>
+{% endblock %}
+

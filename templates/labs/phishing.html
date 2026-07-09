@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block page_title %}Phishing Detection Lab{% endblock %}
+{% block content %}
+<form method="post" class="email-stack">
+    {% for item in examples %}
+    <article class="glass-card email-card">
+        <div class="section-head"><h2>{{ item.subject }}</h2><span>{{ item.sender }}</span></div>
+        <p>{{ item.body }}</p>
+        <div class="segmented">
+            <label><input type="radio" name="email_{{ item.id }}" value="legitimate" required> Legitimate</label>
+            <label><input type="radio" name="email_{{ item.id }}" value="phishing"> Phishing</label>
+        </div>
+    </article>
+    {% endfor %}
+    <button class="btn-cyber" type="submit"><i data-lucide="mail-check"></i> Submit Analysis</button>
+</form>
+{% if result %}
+<section class="glass-card result-card">
+    <h2>Detection Score: {{ result.score }}/{{ result.total }} ({{ result.percent }}%)</h2>
+    {% for row in result.feedback %}
+    <p><strong>{{ "Correct" if row.correct else "Review" }}:</strong> {{ row.subject }} - {{ row.explanation }}</p>
+    {% endfor %}
+</section>
+{% endif %}
+{% endblock %}
+

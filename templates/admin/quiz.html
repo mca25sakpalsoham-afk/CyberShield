@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block page_title %}Quiz Question Manager{% endblock %}
+{% block content %}
+<section class="glass-card">
+    <form method="post" class="stacked-form admin-form">
+        <label>Question<textarea name="question" required></textarea></label>
+        <div class="form-grid"><label>A<input name="option_a" required></label><label>B<input name="option_b" required></label><label>C<input name="option_c" required></label><label>D<input name="option_d" required></label></div>
+        <label>Correct Option<select name="correct_option"><option>A</option><option>B</option><option>C</option><option>D</option></select></label>
+        <label>Explanation<textarea name="explanation" required></textarea></label>
+        <button class="btn-cyber" type="submit">Add Question</button>
+    </form>
+</section>
+{% endblock %}
+

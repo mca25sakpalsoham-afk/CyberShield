@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block page_title %}Cross-Site Scripting Lab{% endblock %}
+
+{% block content %}
+<div class="lab-grid">
+
+    <section class="glass-card">
+
+        <h2>Input Sandbox</h2>
+
+        <form method="post" class="stacked-form">
+
+            <label>
+                Payload
+                <textarea name="payload" rows="5" placeholder="<script>alert('XSS')</script>"></textarea>
+            </label>
+
+            <button class="btn-cyber" type="submit">
+                <i data-lucide="code-2"></i>
+                Render Comparison
+            </button>
+
+            <div style="margin-top:20px;">
+
+                <h3>Common XSS Payloads</h3>
+
+                <ul>
+                    <li>&lt;script&gt;alert(1)&lt;/script&gt;</li>
+                    <li>&lt;img src=x onerror=alert(1)&gt;</li>
+                    <li>&lt;svg onload=alert(1)&gt;</li>
+                    <li>&lt;body onload=alert(1)&gt;</li>
+                    <li>javascript:alert(1)</li>
+                </ul>
+
+            </div>
+
+        </form>
+
+    </section>
+
+    <section class="glass-card">
+
+        <h2>Attack Analysis</h2>
+
+        {% if result %}
+
+        <div class="compare-grid">
+
+            <div>
+                <span>Unsafe Browser Output</span>
+                <code>{{ result.original }}</code>
+
+                <p class="danger-text">
+                    A vulnerable website could execute this payload.
+                </p>
+            </div>
+
+            <div>
+                <span>Safe Browser Output</span>
+                <code>{{ result.sanitized }}</code>
+
+                <p>
+                    Escaping converts script syntax into harmless text.
+                </p>
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="glass-card" style="padding:15px;">
+
+            <h3>Attack Details</h3>
+
+            <p>
+                <strong>Attack Type:</strong>
+                {{ result.attack_type }}
+            </p>
+
+            <p>
+                <strong>Severity:</strong>
+
+                {% if result.severity == "HIGH" %}
+                    <span class="danger-text">🔴 HIGH</span>
+                {% else %}
+                    <span style="color:#20e3b2;">🟢 LOW</span>
+                {% endif %}
+            </p>
+
+        </div>
+
+        <div class="glass-card" style="padding:15px;margin-top:15px;">
+
+            <h3>Risk Score</h3>
+
+            <strong>{{ result.risk_score }}/100</strong>
+
+            <div style="background:#1f2a44;height:12px;border-radius:10px;margin-top:10px;">
+                <div class="risk-bar-fill"
+                    data-width="{{ risk_width }}">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="glass-card" style="padding:15px;margin-top:15px;">
+
+            <h3>Browser Simulation</h3>
+
+            {% if result.severity == "HIGH" %}
+
+                <p class="danger-text">
+                    ⚠ JavaScript execution detected
+                </p>
+
+                <ul>
+                    <li>Alert box triggered</li>
+                    <li>Cookies could be accessed</li>
+                    <li>User session may be hijacked</li>
+                </ul>
+
+            {% else %}
+
+                <p style="color:#20e3b2;">
+                    ✓ No executable script detected
+                </p>
+
+            {% endif %}
+
+        </div>
+
+        <div class="glass-card" style="padding:15px;margin-top:15px;">
+
+            <h3>Technical Explanation</h3>
+
+            <p>{{ result.explanation }}</p>
+
+        </div>
+
+        <div class="glass-card" style="padding:15px;margin-top:15px;">
+
+            <h3>Security Classification</h3>
+
+            <p>
+                <strong>OWASP:</strong>
+                {{ result.owasp }}
+            </p>
+
+            <p>
+                <strong>CWE:</strong>
+                {{ result.cwe }}
+            </p>
+
+        </div>
+
+        <br>
+
+        <div class="glass-card" style="padding:15px;">
+
+            <h3>Potential Impact</h3>
+
+            <ul>
+                <li>Cookie Theft</li>
+                <li>Session Hijacking</li>
+                <li>Credential Theft</li>
+                <li>Malicious Redirects</li>
+            </ul>
+
+        </div>
+
+        <br>
+
+        <div class="glass-card" style="padding:15px;">
+
+            <h3>Defensive Controls</h3>
+
+            <ul>
+                <li>Output Encoding</li>
+                <li>Input Validation</li>
+                <li>Content Security Policy (CSP)</li>
+                <li>Secure Framework Templating</li>
+            </ul>
+
+        </div>
+
+        {% else %}
+
+        <p class="muted">
+            Submit a payload to compare unsafe rendering with escaped output.
+        </p>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+<script>
+document.querySelectorAll('.risk-bar-fill').forEach(bar => {
+    bar.style.width = bar.dataset.width + '%';
+});
+</script>
+{% endblock %}
